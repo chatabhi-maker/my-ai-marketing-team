@@ -1,30 +1,32 @@
 import streamlit as st
-import google.generativeai as genai  # 🔄 Updated to bypass the cloud naming bug!
+import google.generativeai as genai
 
-# Set up the web page title and icon
+# 1. Set up the web page title and icon
 st.set_page_config(page_title="Abhinav's AI Agent Team", page_icon="🚀")
 
 st.title("🕵️‍♂️ Multi-Agent Marketing Team")
 st.write("Type a topic below. Watch the Researcher and Copywriter work together to build a LinkedIn post!")
 
+# 2. Add an input box for the user on the web page
 topic_input = st.text_input("Enter your content topic:", "Why non-tech professionals should learn AI")
 
-# Securely grab your API key from the settings vault
+# 3. Securely grab your API key from the settings vault
 MY_KEY = st.secrets["GOOGLE_API_KEY"]
 
 if st.button("Generate Post 🚀"):
     if not MY_KEY:
         st.error("Please add your valid Google API key to Streamlit Advanced Settings!")
     else:
-        # Configure the global connection
+        # Configure the global connection using the stable library wrapper
         genai.configure(api_key=MY_KEY)
+        
+        # Set up the stable Gemini model engine
+        model = genai.GenerativeModel("gemini-1.5-flash")
         
         # --- AGENT 1: RESEARCH ---
         with st.spinner("🕵️‍♂️ Agent 1 (Researcher) is gathering data..."):
-            # Using the stable 1.5-flash model mapping for this library setup
-            research_response = genai.generate_text(
-                model="models/gemini-1.5-flash",
-                prompt=f"You are a precise data researcher. Provide exactly 3 highly detailed facts about the topic: {topic_input}"
+            research_response = model.generate_content(
+                f"You are a precise data researcher. Provide exactly 3 highly detailed facts about the topic: {topic_input}"
             )
             raw_research = research_response.text
         
@@ -34,9 +36,8 @@ if st.button("Generate Post 🚀"):
             
         # --- AGENT 2: COPYWRITING ---
         with st.spinner("✍️ Agent 2 (Copywriter) is crafting the post..."):
-            writer_response = genai.generate_text(
-                model="models/gemini-1.5-flash",
-                prompt=f"You are a professional LinkedIn marketer. Create a high-energy, engaging post based on this raw data:\n\n{raw_research}"
+            writer_response = model.generate_content(
+                f"You are a professional LinkedIn marketer. Create a high-energy, engaging post based on this raw data:\n\n{raw_research}"
             )
             final_post = writer_response.text
             
