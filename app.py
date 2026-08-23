@@ -28,7 +28,7 @@ if st.button("Generate Post 🚀"):
             # --- AGENT 1: RESEARCH ---
             with st.spinner("🕵️‍♂️ Agent 1 (Researcher) is gathering data..."):
                 chat_researcher = client.chats.create(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.6-flash",  # 🔄 Updated to the active 3.6 model wrapper,
                     config={"system_instruction": "You are a precise data researcher. Provide exactly 3 highly detailed facts about the topic."}
                 )
                 research_response = chat_researcher.send_message(f"Research this topic: {topic_input}")
@@ -41,7 +41,7 @@ if st.button("Generate Post 🚀"):
             # --- AGENT 2: COPYWRITING ---
             with st.spinner("✍️ Agent 2 (Copywriter) is crafting the post..."):
                 chat_writer = client.chats.create(
-                    model="gemini-2.5-flash",
+                   model="gemini-3.6-flash",  # 🔄 Updated to the active 3.6 model wrapper,
                     config={"system_instruction": "You are a professional LinkedIn marketer. Create a high-energy post based on raw data."}
                 )
                 writer_response = chat_writer.send_message(f"Convert this research into a top-tier LinkedIn post:\n\n{raw_research}")
