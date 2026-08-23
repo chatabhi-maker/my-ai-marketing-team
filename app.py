@@ -20,8 +20,8 @@ if st.button("Generate Post 🚀"):
         # Configure the global connection using the stable library wrapper
         genai.configure(api_key=MY_KEY)
         
-        # Set up the stable Gemini model engine
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        # 🔄 FIXED NAME: Added the explicit 'models/' prefix required by this library version
+        model = genai.GenerativeModel("models/gemini-1.5-flash")
         
         # --- AGENT 1: RESEARCH ---
         with st.spinner("🕵️‍♂️ Agent 1 (Researcher) is gathering data..."):
