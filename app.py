@@ -1,32 +1,33 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Set up the web page title and icon
+# 1. Set up the web page title and icon
 st.set_page_config(page_title="Abhinav's AI Agent Team", page_icon="🚀")
 
 st.title("🕵️‍♂️ Multi-Agent Marketing Team")
 st.write("Type a topic below. Watch the Researcher and Copywriter work together to build a LinkedIn post!")
 
-# Add an input box for the user on the web page
+# 2. Add an input box for the user on the web page
 topic_input = st.text_input("Enter your content topic:", "Why non-tech professionals should learn AI")
 
-# 🔑 CRITICAL KEY STEP: Clean and parse the password input text string
-MY_KEY = st.secrets["GOOGLE_API_KEY"]
-
-# Automatically strips hidden spaces or newline gaps that break validation checkpoints
-MY_KEY = RAW_KEY.strip() if RAW_KEY else ""
+# 3. Securely fetch the API key from your Streamlit Advanced Settings vault
+try:
+    SECRET_KEY = st.secrets["GOOGLE_API_KEY"]
+    MY_KEY = SECRET_KEY.strip() if SECRET_KEY else ""
+except Exception:
+    MY_KEY = ""
 
 if st.button("Generate Post 🚀"):
-    if not MY_KEY or "YOUR_REAL_GOOGLE_KEY_HERE" in MY_KEY:
-        st.error("❌ Setup Error: Please replace the placeholder text on line 14 with your actual Google API key!")
+    if not MY_KEY:
+        st.error("❌ Setup Error: 'GOOGLE_API_KEY' was not found in your Streamlit Advanced Settings secrets box!")
     elif not MY_KEY.startswith("AIzaSy"):
-        st.error("❌ Key Type Error: This doesn't look like a Google API key. Google keys must start with 'AIzaSy'. Please verify your string.")
+        st.error("❌ Key Type Error: The key in your secrets manager does not start with 'AIzaSy'. Please verify your Google API key.")
     else:
         try:
             # Configure the global server connection wrapper
             genai.configure(api_key=MY_KEY)
             
-            # Utilizing the modern, universally active stable production model endpoints
+            # Utilizing the modern, active stable production model endpoints
             model = genai.GenerativeModel("models/gemini-2.5-flash")
             
             # --- AGENT 1: RESEARCH ---
@@ -52,4 +53,3 @@ if st.button("Generate Post 🚀"):
             
         except Exception as e:
             st.error(f"❌ Connection or Key Validation Failed: {e}")
-            st.info("💡 Troubleshooting Tip: If you still see a 400 error here, head to aistudio.google.com, delete your old key, create a fresh one, and replace line 14.")
