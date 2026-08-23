@@ -1,5 +1,10 @@
+import sys
+sys.path.insert(0, '/home/adminuser/venv/lib/python3.14/site-packages')
+
 import streamlit as st
 from google import genai
+
+# ... (rest of your working code remains exactly the same)
 
 # Set up the web page title and icon
 st.set_page_config(page_title="Abhinav's AI Agent Team", page_icon="🚀")
