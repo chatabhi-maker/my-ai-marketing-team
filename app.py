@@ -11,7 +11,7 @@ st.write("Type a topic below. Watch the Researcher and Copywriter work together 
 topic_input = st.text_input("Enter your content topic:", "Why non-tech professionals should learn AI")
 
 # 🔑 CRITICAL KEY STEP: Clean and parse the password input text string
-RAW_KEY = "AIzaSyAQ.Ab8RN6IImWb6Gb3LyoGZuZqC4BttA01vl7MtJH8EWu53rgnWrw"
+RAW_KEY = "AIzaSyAQ.Ab8RN6JUkvsI3lp3oOrIXYMraCF0c1Zb754S-SCwgzhD8Hying"
 
 # Automatically strips hidden spaces or newline gaps that break validation checkpoints
 MY_KEY = RAW_KEY.strip() if RAW_KEY else ""
