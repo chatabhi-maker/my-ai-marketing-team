@@ -11,7 +11,7 @@ st.write("Type a topic below. Watch the Researcher and Copywriter work together 
 topic_input = st.text_input("Enter your content topic:", "Why non-tech professionals should learn AI")
 
 # 🔑 PASTE YOUR ACTUAL AIzaSy... KEY DIRECTLY INSIDE THESE QUOTES
-MY_KEY = "AIzaSyYOUR_REAL_GOOGLE_KEY_HERE"
+MY_KEY = "AIzaSyAQ.Ab8RN6IImWb6Gb3LyoGZuZqC4BttA01vl7MtJH8EWu53rgnWrw"
 
 if st.button("Generate Post 🚀"):
     if not MY_KEY or MY_KEY == "AIzaSyYOUR_REAL_GOOGLE_KEY_HERE":
