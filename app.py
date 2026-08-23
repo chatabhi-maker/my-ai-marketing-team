@@ -10,18 +10,23 @@ st.write("Type a topic below. Watch the Researcher and Copywriter work together 
 # Add an input box for the user on the web page
 topic_input = st.text_input("Enter your content topic:", "Why non-tech professionals should learn AI")
 
-# 🔑 PASTE YOUR ACTUAL AIzaSy... KEY DIRECTLY INSIDE THESE QUOTES
-MY_KEY = "AIzaSyAQAb8RN6IImWb6Gb3LyoGZuZqC4BttA01vl7MtJH8EWu53rgnWrw"
+# 🔑 CRITICAL KEY STEP: Clean and parse the password input text string
+RAW_KEY = "AIzaSyAQ.Ab8RN6IImWb6Gb3LyoGZuZqC4BttA01vl7MtJH8EWu53rgnWrw"
+
+# Automatically strips hidden spaces or newline gaps that break validation checkpoints
+MY_KEY = RAW_KEY.strip() if RAW_KEY else ""
 
 if st.button("Generate Post 🚀"):
-    if not MY_KEY or MY_KEY == "AIzaSyYOUR_REAL_GOOGLE_KEY_HERE":
-        st.error("Please add your valid Google API key to line 14 inside the quotes!")
+    if not MY_KEY or "YOUR_REAL_GOOGLE_KEY_HERE" in MY_KEY:
+        st.error("❌ Setup Error: Please replace the placeholder text on line 14 with your actual Google API key!")
+    elif not MY_KEY.startswith("AIzaSy"):
+        st.error("❌ Key Type Error: This doesn't look like a Google API key. Google keys must start with 'AIzaSy'. Please verify your string.")
     else:
         try:
-            # Configure the global connection using the stable library wrapper
+            # Configure the global server connection wrapper
             genai.configure(api_key=MY_KEY)
             
-            # 🔄 CRITICAL FIX: Updated to the correct active model address for this library
+            # Utilizing the modern, universally active stable production model endpoints
             model = genai.GenerativeModel("models/gemini-2.5-flash")
             
             # --- AGENT 1: RESEARCH ---
@@ -46,4 +51,5 @@ if st.button("Generate Post 🚀"):
             st.text_area("Copy your LinkedIn Post here:", value=final_post, height=300)
             
         except Exception as e:
-            st.error(f"❌ Execution Error: {e}")
+            st.error(f"❌ Connection or Key Validation Failed: {e}")
+            st.info("💡 Troubleshooting Tip: If you still see a 400 error here, head to aistudio.google.com, delete your old key, create a fresh one, and replace line 14.")
