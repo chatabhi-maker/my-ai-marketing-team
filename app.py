@@ -1,19 +1,22 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. Set up the web page title and icon
+# Set up the web page title and icon
 st.set_page_config(page_title="Abhinav's AI Agent Team", page_icon="🚀")
 
 st.title("🕵️‍♂️ Multi-Agent Marketing Team")
 st.write("Type a topic below. Watch the Researcher and Copywriter work together to build a LinkedIn post!")
 
-# 2. Add an input box for the user on the web page
+# Add an input box for the user on the web page
 topic_input = st.text_input("Enter your content topic:", "Why non-tech professionals should learn AI")
 
-# 3. Securely fetch the API key from your Streamlit Advanced Settings vault
+# Securely grab the API key from your Streamlit Advanced Settings vault
 try:
-    SECRET_KEY = st.secrets["GOOGLE_API_KEY"]
-    MY_KEY = SECRET_KEY.strip() if SECRET_KEY else ""
+    RAW_KEY = st.secrets["GOOGLE_API_KEY"]
+    
+    # 🔄 CRITICAL CLOUD FIX: Strips out hidden outer quotation marks (" or ') 
+    # that Streamlit Cloud accidentally glues into the key text string!
+    MY_KEY = RAW_KEY.strip().replace('"', '').replace("'", "") if RAW_KEY else ""
 except Exception:
     MY_KEY = ""
 
@@ -21,14 +24,14 @@ if st.button("Generate Post 🚀"):
     if not MY_KEY:
         st.error("❌ Setup Error: 'GOOGLE_API_KEY' was not found in your Streamlit Advanced Settings secrets box!")
     elif not MY_KEY.startswith("AIzaSy"):
-        st.error("❌ Key Type Error: The key in your secrets manager does not start with 'AIzaSy'. Please verify your Google API key.")
+        st.error(f"❌ Key Type Error: Your key starts with '{MY_KEY[:6]}' but must start with 'AIzaSy'. Please verify your Google API key string.")
     else:
         try:
-            # Configure the global server connection wrapper
+            # Configure the global connection using the stable library wrapper
             genai.configure(api_key=MY_KEY)
             
-            # Utilizing the modern, active stable production model endpoints
-            model = genai.GenerativeModel("models/gemini-2.5-flash")
+            # Using the stable active model parameter layout
+            model = genai.GenerativeModel("models/gemini-1.5-flash")
             
             # --- AGENT 1: RESEARCH ---
             with st.spinner("🕵️‍♂️ Agent 1 (Researcher) is gathering data..."):
